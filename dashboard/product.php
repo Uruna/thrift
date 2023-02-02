@@ -30,7 +30,7 @@ $category = mysqli_query($con, $all_category);
                 <div class="card-body">
                   <div class="form-group">
                     <label for="catname">Title</label>
-                    <input type="text" name="name" class="form-control" id="catname" placeholder="Product name">
+                    <input type="text" name="name" class="form-control" id="catname" placeholder="Product name" required>
                   </div>
                   <div class="form-group">
                     <select class="form-select text-capitalize" name="category" id="">
@@ -70,19 +70,19 @@ $category = mysqli_query($con, $all_category);
                   </div>
                   <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="text" name="price" class="form-control" id="price" placeholder="price in NRS">
+                    <input type="text" name="price" class="form-control" id="price" required placeholder="price in NRS">
                   </div>
                   <div class="form-group">
                     <label for="tags">Tags</label>
-                    <input type="text" name="tags" class="form-control" id="tags" placeholder="Category tags seperated by comma">
+                    <input type="text" name="tags" class="form-control" id="tags" required placeholder="Category tags seperated by comma">
                   </div>
                   <div class="form-group">
                     <label for="tags">Details</label> <br>
-                   <textarea name="details" id="details" class="w-100" rows="10" placeholder="details of the product"></textarea>
+                   <textarea name="details" id="details" class="w-100" rows="10" required placeholder="details of the product"></textarea>
                   </div>
                   <div class="form-group">
                     <label for="image">Image</label>
-                    <input type="file" name="image" class="form-control" id="image">
+                    <input type="file" required name="image" class="form-control" id="image">
                   </div>
                 </div>
                 <!-- /.card-body -->

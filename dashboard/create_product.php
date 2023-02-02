@@ -18,21 +18,20 @@ $fileTempName = $_FILES['image']['tmp_name'];
 // move file 
 $uploads_dir ="./uploads";
 // chmod($uploads_dir, 0777);
-if(move_uploaded_file($uploads_dir,$fileTempName)){
-    echo 'moved';
+if(move_uploaded_file($fileTempName,$uploads_dir.'/'.$fileName)){
+    $sql = "INSERT into products(category_id, name, size, color, age, price, tags, details, image, status) values('$category', '$name', '$size', '$color', '$group', '$price', '$tags', '$details', '$fileName', 1 )";
+    $ins = mysqli_query($con, $sql);
+
+    if(!$ins){
+        echo "error".mysqli_error($con);
+    }
+    else{
+        echo 'done';
+    }
 }
 else{
-    echo 'failed';
+    echo 'failed to move file';
 }
 
-$sql = "INSERT into products values('', '$category', '$name', '$size', '$color', '', '$group', '$price', '$tags', '$details', '$fileName', 1 )";
 
-$ins = mysqli_query($con, $sql);
-
-if(!$ins){
-    echo "error";
-}
-else{
-    echo 'done';
-}
 ?>

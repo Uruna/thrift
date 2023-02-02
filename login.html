@@ -19,6 +19,7 @@
             <form action="login.php" method="post"  id="login"  class="input-group">
                 <input type="text" name="email" class="input-field" placeholder="Email" required name="Email">
                 <input type="password" name="password" class="input-field" placeholder="Enter Password" name="Password" required >
+                <input type="hidden" name="cart_item" id="offline_cart_items">
                 <input type="checkbox" class="checkbox"><span>Remember Password</span>
                 <button type="submit" class="submit-btn">Log In </button>
             </form>
@@ -63,6 +64,13 @@
             z.style.left = "0px"
         }
 
+    </script>
+
+    <script>
+        // sending cart items while login, if logged in store to table cart
+        var cart = document.getElementById('offline_cart_items');
+        var cart_items = localStorage.getItem('thrift_cart');
+        cart.setAttribute('value', cart_items);
     </script>
     
 </body>
