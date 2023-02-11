@@ -1,17 +1,22 @@
-<?php 
+<?php
 include_once('../connect.php');
-
-//for parent category
-$sel_category = "SELECT * from categories where parent_id=0 ";
-$parent = mysqli_query($con, $sel_category);
-
-//for all categories
-$all_category = "SELECT * from categories";
-$category = mysqli_query($con, $all_category);
-
 ?>
 <?php include('top.php'); ?>
+<?php
+  //for parent category
+  $sel_category = "SELECT * from categories where parent_id=0 ";
+  $parent = mysqli_query($con, $sel_category);
 
+  //for all categories
+  if($_SESSION['user_role'] == 'admin'):
+    $user_id = $_SESSION['user_id'];
+    $products_q = "SELECT * from products order by id desc limit 11";
+  else:
+    $products_q = "SELECT * from products where user_id=$user_id order by id desc limit 11";
+  endif;
+
+  $products = mysqli_query($con, $products_q);
+?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -96,35 +101,29 @@ $category = mysqli_query($con, $all_category);
         </div>
             <div class="col-md-6">
                 <div class="">
-                    <h3 class="bg-success text-light w-100 p-2">Add Category</h3>
+                    <h3 class="bg-success text-light w-100 p-2">Recent Prdoucts</h3>
                 </div>
                     <table class="table table-striped w-100 text-capitalize">
                         <thead>
                             <tr>
-                                <th>sn</th>
                                 <th>name</th>
-                                <th>has parent</th>
+                                <th>price</th>
+                                <th>image</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
-                            foreach($category as $key => $item){
+                            foreach($products ? $products : [] as $key => $item){
                                 ?>
-                                    <tr>
-                                        <td><?php echo $key+1; ?></td>
+                                    <tr class="">
                                         <td><?php echo $item['name']; ?></td>
-                                        <td><?php 
-                                        if($item['parent_id'] == 0 ){
-                                                echo 'main'; 
-                                            }
-                                            else{
-                                                echo 'sub';
-                                            }
-                                        ?></td>
+                                        <td><?php echo $item['price']; ?></td>
+                                        <td><img src="./uploads/<?php echo $item['image']; ?>" alt="" height="48px"></td>
                                     </tr>
                                 <?php
                             }
                             ?>
+                            <tr class="text-center"><td colspan="3"> <a href="">View All</a></td></tr>
                         </tbody>
                     </table>
             </div>

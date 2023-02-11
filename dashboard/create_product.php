@@ -26,7 +26,7 @@ if(move_uploaded_file($fileTempName,$uploads_dir.'/'.$fileName)){
         echo "error".mysqli_error($con);
     }
     else{
-        echo 'done';
+        header('location: product.php');
     }
 }
 else{

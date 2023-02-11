@@ -25,7 +25,7 @@
     }
     else{
         // update order
-        $sql3 = "UPDATE orders set payment_id ='$payment_id', shipping_id='$shipping_id' where id='$order_id' ";
+        $sql3 = "UPDATE orders set payment_id ='$payment_id', shipping_id='$shipping_id', price = '$amount' where id='$order_id' ";
         $update_payment = mysqli_query($con, $sql3);
 
         if($update_payment){

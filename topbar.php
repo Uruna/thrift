@@ -19,6 +19,8 @@
           <link rel="stylesheet" href="tops.css">
           <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
      -->
+     <script src="jquery.js"></script>
+     <script src="ajax.js" ></script>
 </head>
 
 <body>

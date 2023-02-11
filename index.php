@@ -1,3 +1,15 @@
+<?php 
+include_once('./connect.php');
+
+//for parent category
+$category_q = "SELECT cat.*, pro.*, cat.name as category from products pro left join categories cat on pro.category_id = cat.id group by pro.category_id order by pro.id desc";
+$cat_products = mysqli_query($con, $category_q);
+
+$produts_q = "SELECT * from products order by id desc";
+$products = mysqli_query($con, $produts_q);
+
+
+?>
 <?php include_once('topbar.php') ?>
 <link rel="stylesheet" href="main.css">
 
@@ -48,30 +60,29 @@
   <h1>Our Collections</h1>
 </div>
 
-<div class="card-container">
-  <div class="card-item"><img src="./images/sweat.jpg" style="height: 320px; width: 420px;"/></div>
-  <div class="card-item"><p>Tops</p></div>
-
-  <div class="card-item"><img src="./images/foot.jpg" style="height: 320px; width: 420px;" /></div>
-  <div class="card-item">Footwears</div>
-  <div class="card-item"><img src="./images/skr.jpg" style="height: 320px; width: 420px;" /></div>
-  <div class="card-item">Bottoms</div>
-  <div class="card-item"><img src="./images/dres.jpg" style="height: 320px; width: 420px;" /></div>
-  <div class="card-item">Dresses</div>
-  <div class="card-item"><img src="./images/trad.jpg" style="height: 320px; width: 420px;" /></div>
-  <div class="card-item">Traditionals</div>
-  <div class="card-item"><img src="./images/cap.JPG" style="height: 320px; width: 420px;" /></div>
-  <div class="card-item">Accesories</div>
-</div>
+<div class="row d-flex justify-content-between">
+  <?php 
+  foreach($cat_products as $cat){
+    ?>
+  <span class="col-md-6 d-flex align-items-center">
+    <div class="col-10"><img src="dashboard/uploads/<?php echo $cat['image']; ?>" style="height: 320px; width: 420px;"/></div>
+    <div class="card-item col-2"><p><?php echo $cat['category']; ?></p></div>
+  </span>
+  <?php
+  }
+  ?>
+  </div>
 </section>
 <!-- Latest Products -->
 <div class="card-title">
   <h1>Latest Products</h1>
 </div>
   <div class="row">
-    <div class="col-4">
-      <img src="./images/yel.JPG">
-      <h4>Some Title</h4>
+    <?php foreach($products as $product){
+      ?>
+      <div class="col-4">
+      <img src="dashboard/uploads/<?php echo $product['image'] ?>">
+      <h4><?php echo $product['name'] ?></h4>
       <div class="rating">
         <i class="fa-solid fa-star"></i>
         <i class="fa-solid fa-star"></i>
@@ -79,44 +90,10 @@
         <i class="fa-solid fa-star"></i>
         <i class="fa-regular fa-star"></i>
       </div>
-      <p>Rs.600</p>
+      <p>Rs.<?php echo $product['price'] ?></p>
     </div>
-    <div class="col-4">
-      <img src="./images/pink.JPG">
-      <h4>Some Title</h4>
-      <div class="rating">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-      <p>Rs.600</p>
-    </div>
-    <div class="col-4">
-      <img src="./images/red.JPG" style="height: 487.23px; width: 365.43px;">
-      <h4>Some Title</h4>
-      <div class="rating">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-regular fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-      <p>Rs.600</p>
-    </div>
-    <div class="col-4">
-      <img src="./images/white.JPG" style="height: 487.23px; width: 365.43px;">
-      <h4>Some Title</h4>
-      <div class="rating">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-      <p>Rs.600</p>
-    </div>
-  </div>
+    <?php
+    }
+    ?>
 <?php include_once('foot.php') ?>
   

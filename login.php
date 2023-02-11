@@ -26,8 +26,10 @@ if(mysqli_num_rows($check) == 1){
         $id = str_replace('"','', $product_id);
         $addCart(intval($id));
     }
+    $user =  mysqli_fetch_array($check);
     session_start();
-    $_SESSION['user_id'] = mysqli_fetch_array($check)['id'];
+    $_SESSION['user_id'] =$user['id'];
+    $_SESSION['user_role'] =$user['type'];
     header('location: dashboard/index.php');
 }
 else{
