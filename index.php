@@ -5,7 +5,7 @@ include_once('./connect.php');
 $category_q = "SELECT cat.*, pro.*, cat.name as category from products pro left join categories cat on pro.category_id = cat.id group by pro.category_id order by pro.id desc";
 $cat_products = mysqli_query($con, $category_q);
 
-$produts_q = "SELECT * from products order by id desc";
+$produts_q = "SELECT * from products order by id desc limit 8";
 $products = mysqli_query($con, $produts_q);
 
 
@@ -60,13 +60,15 @@ $products = mysqli_query($con, $produts_q);
   <h1>Our Collections</h1>
 </div>
 
-<div class="row d-flex justify-content-between">
+<div class="row d-flex justify-content-center gap-2">
   <?php 
   foreach($cat_products as $cat){
     ?>
-  <span class="col-md-6 d-flex align-items-center">
-    <div class="col-10"><img src="dashboard/uploads/<?php echo $cat['image']; ?>" style="height: 320px; width: 420px;"/></div>
-    <div class="card-item col-2"><p><?php echo $cat['category']; ?></p></div>
+  <span class="col-md-3" style="border:1px solid grey">
+  <div class="card-item"><h4 class="text-capitalize "><?php echo $cat['category']; ?></h4></div>
+    <div class="col-12"><img class="img-fluid" src="dashboard/uploads/<?php echo $cat['image']; ?>" style=""/>
+  </div>
+    
   </span>
   <?php
   }
@@ -80,20 +82,25 @@ $products = mysqli_query($con, $produts_q);
   <div class="row">
     <?php foreach($products as $product){
       ?>
-      <div class="col-4">
-      <img src="dashboard/uploads/<?php echo $product['image'] ?>">
-      <h4><?php echo $product['name'] ?></h4>
-      <div class="rating">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-regular fa-star"></i>
+      
+        <div class="col-4">
+        <a href="detail.php?id=<?php echo $product['id'] ?>">
+          <img src="dashboard/uploads/<?php echo $product['image'] ?>">
+          <h4><?php echo $product['name'] ?></h4>
+          <div class="rating">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+          </div>
+          <p>Rs.<?php echo $product['price'] ?></p>
+      </a>
+
       </div>
-      <p>Rs.<?php echo $product['price'] ?></p>
-    </div>
     <?php
     }
     ?>
+    </div>
 <?php include_once('foot.php') ?>
   

@@ -13,7 +13,7 @@
         $today = date('Y-m-d h:i:s');
         $result = 0;
         $differ = (strtotime($today) - strtotime($date));
-        echo $differ."<br>";
+        // echo $differ."<br>";
         if($differ < 60){ //seconds
             $result = 'few seconds ago';
         }
@@ -78,7 +78,7 @@
                 <h4 class="text-capitalize"><?php echo $details['name'] ?></h4>
             </span>
             <span style="display: flex;">
-                <button role="button" data-product-id="<?php echo rand(1, 12); ?>" style="padding:4px;" id="add_to_cart" >cart <span id="count_cart" style="padding:2px 6px;background-color:white;color:olive;border-radius:8px;"></span></button>
+                <button role="button" data-product-id="<?php echo $details['id'] ?>" style="padding:4px;" id="add_to_cart" >cart <span id="count_cart" style="padding:2px 6px;background-color:white;color:olive;border-radius:8px;"></span></button>
                 
             </span>
         </div>
@@ -88,16 +88,36 @@
             <option>Buy</option>
             <option>Rent</option>
         </select> -->
-        <a href="order.php?id=<?php echo $details['id'] ?>&type=buy">
-            <button class="button1 btn btn-sm">
-            Buy Now
-            </button>
-        </a>
-        <a href="order.php?id=<?php echo $details['id'] ?>&type=rent">
-            <button class="button1 btn btn-sm">
-                Rent Now
-            </button>
-        </a>
+        <?php 
+            if(empty($_SESSION['user_id'])){
+                ?>
+                <a href="login.php">
+                        <button class="button1 btn btn-sm">
+                        Buy Now
+                        </button>
+                    </a>
+                    <a href="login.php">
+                        <button class="button1 btn btn-sm">
+                            Rent Now
+                        </button>
+                    </a>
+                <?php
+            }
+            else{
+                ?>
+                <a href="order.php?id=<?php echo $details['id'] ?>&type=buy">
+                            <button class="button1 btn btn-sm">
+                            Buy Now
+                            </button>
+                        </a>
+                        <a href="order.php?id=<?php echo $details['id'] ?>&type=rent">
+                            <button class="button1 btn btn-sm">
+                                Rent Now
+                            </button>
+                        </a>
+                <?php
+            }
+        ?>
         <h4>Product Details</h4>
         <span>
             <?php echo $details['details'] ?>

@@ -3,9 +3,11 @@ include_once('connect.php');
 
 $email = $_POST['email'];
 $password = $_POST['password'];
+
 $cart_item = $_POST['cart_item'];
 $delimeters = ['|','[',',',']',' '];
 $new_item = str_replace($delimeters, $delimeters[0], $cart_item);
+
 // adding the cart to the database table after user is logged in
 $addCart = function($product_id) use($con){
     $user_id = 2; // active user id
