@@ -109,6 +109,7 @@ include_once('../connect.php');
                                 <th>name</th>
                                 <th>price</th>
                                 <th>image</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,6 +120,7 @@ include_once('../connect.php');
                                         <td><?php echo $item['name']; ?></td>
                                         <td><?php echo $item['price']; ?></td>
                                         <td><img src="./uploads/<?php echo $item['image']; ?>" alt="" height="48px"></td>
+                                        <td><a href="edit_product.php?id=<?php echo $item['id']; ?>"><button class="btn btn-xs btn-success">Edit</button></a></td>
                                     </tr>
                                 <?php
                             }

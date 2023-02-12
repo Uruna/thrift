@@ -2,9 +2,36 @@
 include_once('../connect.php');
 include('top.php');
 $user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['user_role'];
+
 //for all categories
-$order_q = "SELECT pro.*, usr.*, pro.name as product, usr.name as user, ord.date as order_date from orders ord left join users usr on ord.user_id = usr.id  left join products pro on ord.product_id = pro.id where ord.user_id = $user_id and ord.type='rent' order by ord.id desc";
-$rents = mysqli_query($con, $order_q);
+switch($user_role){
+    case 'admin':
+        $sql = "SELECT pro.*, ord.*, user.name as buyer, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='rent'";
+        break;
+    case 'seller':
+        $sql = "SELECT pro.*, ord.*, user.name as buyer, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='rent' and pro.user_id='$user_id'";
+        break;
+    default: 
+        $sql = "SELECT pro.*, ord.*, user.name as seller, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='rent' and ord.user_id='$user_id'";
+}
+
+$rents = mysqli_query($con, $sql);
 
  ?>
 
@@ -18,7 +45,7 @@ $rents = mysqli_query($con, $order_q);
                 <div class="">
                     <h3 class="bg-success text-light w-100 p-2">Rents</h3>
                 </div>
-                    <table class="table table-striped w-100 ">
+                <table class="table table-striped w-100 ">
                         <thead>
                             <tr class="text-capitalize">
                                 <th>date</th>
@@ -31,15 +58,16 @@ $rents = mysqli_query($con, $order_q);
                         </thead>
                         <tbody>
                             <?php 
-                            foreach($rents as $key => $item){
+                            while($items=mysqli_fetch_array($rents)){
+                               
                                 ?>
                                     <tr class="">
-                                        <td><?php echo $item["order_date"]; ?></td>
-                                        <td><?php echo $item["user"]; ?></td>
-                                        <td><?php echo $item['product']; ?></td>
-                                        <td><?php echo $item['user']; ?></td>
-                                        <td><?php echo $item['address']; ?></td>
-                                        <td><?php echo $item['price']; ?></td>
+                                        <td><?php echo $items["date"]; ?></td>
+                                        <td><?php echo (isset($items['buyer'])) ? $items['buyer'] : 'self' ?></td>
+                                        <td><?php echo $items['name']; ?></td>
+                                        <td><?php echo (isset($items['seller'])) ? $items['seller'] : 'self' ?></td>
+                                        <td><?php echo $items['shipping']; ?></td>
+                                        <td><?php echo $items['price']; ?></td>
                                     </tr>
                                 <?php
                             }

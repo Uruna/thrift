@@ -7,24 +7,34 @@ $user_role = $_SESSION['user_role'];
 //for all categories
 switch($user_role){
     case 'admin':
-        $where = '1=1';
+        $sql = "SELECT pro.*, ord.*, user.name as buyer, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='buy'";
         break;
     case 'seller':
-        $where = "ord.user_id in (Select user_id from products)";
+        $sql = "SELECT pro.*, ord.*, user.name as buyer, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='buy' and pro.user_id='$user_id'";
         break;
     default: 
-        $where = "ord.user_id = '$user_id'";
+        $sql = "SELECT pro.*, ord.*, user.name as seller, ship.address as shipping
+        from orders ord 
+        left join products pro on ord.product_id=pro.id
+        left join users user on ord.user_id=user.id
+        left join shippings ship on ord.shipping_id=ship.id
+        where ord.type='buy' and ord.user_id='$user_id'";
 }
 
     // $order_q = "SELECT pro.*, usr.*, ord.date as order_date, pro.name as product, usr.name as user from orders ord left join users usr on ord.user_id = usr.id  left join products pro on ord.product_id = pro.id where  $where order by ord.id desc";
-    $order_q = "SELECT user.address as user_address, user.name as buyer, ord.date as order_date, pro.name as product from orders ord  left join products pro on ord.product_id = pro.id left join users user on ord.user_id=user.id ";
-    $orders = mysqli_query($con, $order_q);
-    $get_orders = mysqli_fetch_array($orders);
-    // var_dump($get_orders);
-    foreach($get_orders as $items){
-        echo $items['product'];
-    }
-    die;
+   
+    $orders = mysqli_query($con, $sql);
+ 
 
  ?>
 
@@ -51,15 +61,16 @@ switch($user_role){
                         </thead>
                         <tbody>
                             <?php 
-                            foreach($orders as $key => $item){
+                            while($items=mysqli_fetch_array($orders)){
+                               
                                 ?>
                                     <tr class="">
-                                        <td><?php echo $item["order_date"]; ?></td>
-                                        <td><?php echo $item["buyer"]; ?></td>
-                                        <td><?php echo $item['product']; ?></td>
-                                        <td><?php echo $item['seller']; ?></td>
-                                        <td><?php echo $item['user_address']; ?></td>
-                                        <td><?php echo $item['price']; ?></td>
+                                        <td><?php echo $items["date"]; ?></td>
+                                        <td><?php echo (isset($items['buyer'])) ? $items['buyer'] : 'self' ?></td>
+                                        <td><?php echo $items['name']; ?></td>
+                                        <td><?php echo (isset($items['seller'])) ? $items['seller'] : 'self' ?></td>
+                                        <td><?php echo $items['shipping']; ?></td>
+                                        <td><?php echo $items['price']; ?></td>
                                     </tr>
                                 <?php
                             }

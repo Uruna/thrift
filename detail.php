@@ -34,16 +34,52 @@
     }
     
 
-    // function bayes(){
         $pro = $_GET['id'];
-        echo $pro;
-        $sql = "SELECT * from reviews where product_id='$pro'";
-        $com = mysqli_query($con, $sql);
-        var_dump($com);
 
-        foreach($com as $item){
-            // echo $item;
+        $sql = "SELECT * from reviews where product_id='$pro'";
+        $comment_q = mysqli_query($con, $sql);
+
+        // $comments = [array('this','not good','product'), array('its','silly'), array('superv','products', 'sold','ever'), array('not good','contents')];
+
+        // naive bayes for sentimental analysis of the comment
+        $comments = [];
+        $total_words = 0;
+        while($comments_list=mysqli_fetch_array($comment_q)){
+            $explode_comments = explode(' ', $comments_list['comments']);
+            $total_words+=sizeof($explode_comments);
+            array_push($comments, $explode_comments);
         }
+
+      
+        $negative = ['not', 'bad', 'poor', 'silly', 'worst'];
+        $positive = ['wow', 'nice','excellent', 'superv', 'beautiful'];
+
+        $neg_count=$pos_count=0;
+
+        for($i=0; $i< sizeof($negative); $i++){
+
+            // each comments
+            for($j=0;$j<sizeof($comments);$j++){
+                if(in_array($negative[$i], $comments[$j])){
+                    $neg_count++;
+                }
+            }
+
+        }
+
+        for($i=0; $i< sizeof($positive); $i++){
+            for($j=0;$j<sizeof($comments);$j++){
+                if(in_array($positive[$i], $comments[$j])){
+                    $pos_count++;
+                }
+            }
+        }
+         
+        
+        $neg_probability = $neg_count/$total_words;
+        $pos_probability = $pos_count/$total_words;
+        
+         
     // }
     // echo bayes();die;
    
@@ -145,6 +181,9 @@
         }
         ?>
         <div  id="comment_list">
+            <?php
+                echo "<br> the +ve prob is ".$pos_probability." and -ve prob is ".$neg_probability;
+            ?>
         <details class="mt-3">
             <summary><b>View Comments</b></summary>
             <?php 

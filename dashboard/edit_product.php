@@ -87,7 +87,7 @@ $parent = mysqli_query($con, $sel_category);
                    <textarea name="details" id="details"  value ="<?php echo $product['details'] ?>" class="w-100" rows="10" placeholder="details of the product"></textarea>
                   </div>
                   <div class="form-group">
-                    <img src="uploads/<?php echo  $product['image'] ?>" alt="">
+                    <img class="img-fluid" src="uploads/<?php echo  $product['image'] ?>" alt="">
                   </div>
                   <div class="form-group">
                     <label for="image">Image</label>
